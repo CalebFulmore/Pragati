@@ -1,23 +1,22 @@
-// SignUpForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function SignUpForm({ onAuthSuccess }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Add this line to get the navigate function
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
     try {
-      // Update the URL to your actual sign-up endpoint
       const response = await axios.post('http://localhost:3000/signup', { username, email, password });
       console.log('Account created successfully', response.data);
-      // Inside LoginForm.js and SignUpForm.js, after successful login/signup
       onAuthSuccess(response.data.token);
-
+      navigate('/'); // Navigate to the homepage after successful sign-up
     } catch (error) {
       setError('Account creation failed. Please try again.');
       console.error('Sign up failed', error?.response?.data);
@@ -28,14 +27,15 @@ function SignUpForm({ onAuthSuccess }) {
     <form onSubmit={handleSubmit}>
       {error && <div className="error">{error}</div>}
       <div>
-        <label>Email:</label>
-        // Example input field for the username in SignUpForm.js
+        <label>Username:</label>
+        
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
+        <label>Email:</label>
         <input
           type="email"
           value={email}
