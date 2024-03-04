@@ -1,14 +1,20 @@
-// HomePage.js
 import React from 'react';
-import logo from '/Users/calebsmac/Documents/Pragati/pragati-frontend/src/logo.png'; 
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import WorkoutEntryForm from './WorkoutEntryForm';
 
 function HomePage() {
   return (
-    <div>
-      <img src={logo} alt="Pragati Logo" />
-      <h1>The Fitness App of the Future</h1>
-      {/* Navigation to main features here */}
-    </div>
+    <Router>
+      <div>
+        <h1>Welcome to Pragati</h1>
+        <h2>The Fitness App of the Future</h2>
+        <Link to="/workout">Workout Now!</Link>
+
+        <Routes>
+          <Route path="/workout" element={<WorkoutEntryForm />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

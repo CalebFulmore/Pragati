@@ -37,6 +37,26 @@ const jwt = require('jsonwebtoken');
 // Middleware to parse JSON
 app.use(express.json());
 
+//Workout posting route
+app.post('/submit-workout', async (req, res) => {
+  try {
+    // Extract workout data from the request body
+    const { exercise, sets } = req.body;
+
+    // Handle the submission logic (e.g., save workout data to the database)
+    // Example: Save workout data to MongoDB
+    // const workout = new Workout({ exercise, sets });
+    // await workout.save();
+
+    // Send a success response
+    res.status(201).send({ message: 'Workout submitted successfully' });
+  } catch (error) {
+    // Handle errors
+    console.error('Workout submission error:', error);
+    res.status(500).send({ error: 'Failed to submit workout' });
+  }
+});
+
 
 
 
@@ -67,10 +87,5 @@ app.post('/login', async (req, res) => {
   }
 });
 
-mongoose.connect(process.env.DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('MongoDB connected...'))
-.catch(err => console.error('MongoDB connection error:', err));
+
 
