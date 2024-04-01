@@ -6,7 +6,7 @@ function LoginForm({ onAuthSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Add this line to get the navigate function
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,28 +22,23 @@ function LoginForm({ onAuthSuccess }) {
     }
   };
 
+  const navigateToSignUp = () => {
+    navigate('/signup'); // Navigate to the signup page
+  };
+
   return (
     <form onSubmit={handleSubmit}>
-      {error && <div className="error">{error}</div>} {/* Display any error message */}
+      {error && <div className="error">{error}</div>}
       <div>
         <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       </div>
       <div>
         <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
       </div>
       <button type="submit">Login</button>
+      <button type="button" onClick={navigateToSignUp}>Create Account</button>
     </form>
   );
 }

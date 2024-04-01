@@ -1,4 +1,5 @@
 require('dotenv').config(); // Make sure this line is at the top
+const Workout = require('./models/Workout');
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -84,6 +85,17 @@ app.post('/login', async (req, res) => {
     res.send({ user, token });
   } catch (error) {
     res.status(400).send(error);
+  }
+});
+
+// GET route to retrieve past workouts
+app.get('/api/workouts', async (req, res) => {
+  try {
+    const workouts = await Workout.find(); // This will retrieve all workouts
+    res.status(200).json(workouts);
+  } catch (error) {
+    console.error('Error fetching workouts:', error);
+    res.status(500).send({ error: 'Failed to fetch workouts' });
   }
 });
 

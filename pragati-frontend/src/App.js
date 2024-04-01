@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 import HomePage from './components/HomePage';
 import WorkoutEntryForm from './components/WorkoutEntryForm'; // Adjust the path as necessary
+import PastWorkouts from './components/PastWorkouts';
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
             <Route path="/login" element={<LoginForm onAuthSuccess={handleAuthSuccess} />} />
             <Route path="/signup" element={<SignUpForm onAuthSuccess={handleAuthSuccess} />} />
             <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/past-workouts" element={<PastWorkouts />} /> {/* Make sure you have this route */}
             <Route path="/workout" element={<WorkoutEntryForm />} />
           </Routes>
         </header>
