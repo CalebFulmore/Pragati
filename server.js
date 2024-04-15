@@ -11,6 +11,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Connect to MongoDB
+console.log('Connecting to MongoDB with URI:', process.env.DB_URI);
 mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -40,24 +41,39 @@ app.use(express.json());
 
 //Workout posting route
 app.post('/submit-workout', async (req, res) => {
+  console.log('Received workout data:', req.body.workout);
   try {
-    // Extract workout data from the request body
-    const { exercise, sets } = req.body;
+    // Assuming req.body.workout is the array of exercises with their sets
+    const workoutData = req.body.workout;
 
-    // Handle the submission logic (e.g., save workout data to the database)
-    // Example: Save workout data to MongoDB
-    // const workout = new Workout({ exercise, sets });
-    // await workout.save();
+    // Save workout data to MongoDB
+    const workout = new Workout({ exercises: workoutData });
+    await workout.save();
 
     // Send a success response
     res.status(201).send({ message: 'Workout submitted successfully' });
   } catch (error) {
+    console.error('Workout submission error:', error);
     // Handle errors
     console.error('Workout submission error:', error);
     res.status(500).send({ error: 'Failed to submit workout' });
   }
 });
 
+
+// Delete a workout by ID
+app.delete('/api/workouts/:id', async (req, res) => {
+  try {
+    const workout = await Workout.findByIdAndDelete(req.params.id);
+    if (!workout) {
+      return res.status(404).send({ message: 'Workout not found' });
+    }
+    res.status(200).send({ message: 'Workout deleted', workout });
+  } catch (error) {
+    console.error('Error deleting workout:', error);
+    res.status(500).send({ error: 'Failed to delete workout' });
+  }
+});
 
 
 

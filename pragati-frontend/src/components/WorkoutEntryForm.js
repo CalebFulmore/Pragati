@@ -24,6 +24,7 @@ function WorkoutEntryForm() {
   };
 
   const handleSubmitWorkout = async () => {
+    console.log('Submitting workout:', workout); 
     try {
       await axios.post('http://localhost:3000/submit-workout', { workout });
       alert('Workout submitted successfully');
