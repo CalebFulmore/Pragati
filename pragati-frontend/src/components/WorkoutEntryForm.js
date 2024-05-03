@@ -25,8 +25,13 @@ function WorkoutEntryForm() {
 
   const handleSubmitWorkout = async () => {
     console.log('Submitting workout:', workout); 
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
     try {
-      await axios.post('http://localhost:3000/submit-workout', { workout });
+      await axios.post('http://localhost:3000/submit-workout', { workout }, {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the token in the Authorization header
+        }
+      });
       alert('Workout submitted successfully');
       // Reset the workout
       setWorkout([]);
@@ -35,6 +40,7 @@ function WorkoutEntryForm() {
       alert('Error submitting workout');
     }
   };
+  
 
   const setOrdinal = (n) => {
     const s = ["th", "st", "nd", "rd"];

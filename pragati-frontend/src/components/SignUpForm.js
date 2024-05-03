@@ -15,7 +15,8 @@ function SignUpForm({ onAuthSuccess }) {
     try {
       const response = await axios.post('http://localhost:3000/signup', { username, email, password });
       console.log('Account created successfully', response.data);
-      onAuthSuccess(response.data.token);
+      localStorage.setItem('token', response.data.token); // Store the token in local storage
+      onAuthSuccess(response.data.token); // Update authentication state to true
       navigate('/'); // Navigate to the homepage after successful sign-up
     } catch (error) {
       setError('Account creation failed. Please try again.');

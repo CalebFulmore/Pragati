@@ -7,7 +7,12 @@ function PastWorkouts() {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const { data } = await axios.get('http://localhost:3000/api/workouts'); // Adjust the URL as needed
+        const token = localStorage.getItem('token'); // Get the stored token
+        const { data } = await axios.get('http://localhost:3000/api/workouts', {
+          headers: {
+            Authorization: `Bearer ${token}` // Use the token in the authorization header
+          }
+        });
         setWorkouts(data);
       } catch (error) {
         console.error('Error fetching workouts:', error);
@@ -17,11 +22,15 @@ function PastWorkouts() {
     fetchWorkouts();
   }, []);
 
-  // Define handleDelete inside the component so it has access to workouts and setWorkouts
   const handleDelete = async (id) => {
+    const token = localStorage.getItem('token'); // Ensure you also send the token when deleting
     if (window.confirm('Are you sure you want to delete this workout?')) {
       try {
-        await axios.delete(`http://localhost:3000/api/workouts/${id}`);
+        await axios.delete(`http://localhost:3000/api/workouts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}` // Use the token in the authorization header
+          }
+        });
         setWorkouts(workouts.filter((workout) => workout._id !== id));
       } catch (error) {
         console.error('Error deleting workout:', error);

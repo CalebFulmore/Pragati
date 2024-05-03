@@ -1,44 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import SignUpForm from './components/SignUpForm';
 import HomePage from './components/HomePage';
-import WorkoutEntryForm from './components/WorkoutEntryForm'; // Adjust the path as necessary
+import WorkoutEntryForm from './components/WorkoutEntryForm';
 import PastWorkouts from './components/PastWorkouts';
-
+import axios from 'axios';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Remove the useNavigate hook from here
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      verifyToken(token);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  const verifyToken = async (token) => {
+    try {
+      const response = await axios.get('http://localhost:3000/verify-token', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setIsAuthenticated(response.status === 200);
+      if (response.status !== 200) {
+        localStorage.removeItem('token');
+      }
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      localStorage.removeItem('token');
+      setIsAuthenticated(false);
+    }
+  };
 
   const handleAuthSuccess = (token) => {
     localStorage.setItem('token', token);
     setIsAuthenticated(true);
   };
 
-  // Create a new component for navigation buttons
-  function NavigationButtons() {
-    const navigate = useNavigate(); // Now useNavigate is called within the context of Router
-
-    // Go to the sign-up page
-    const goToSignUp = () => {
-      navigate('/signup');
-    };
-
-    // Go to the login page
-    const goToLogin = () => {
-      navigate('/login');
-    };
-
-    return (
-      <div>
-        <button onClick={goToSignUp}>Need an account? Sign up</button>
-        <button onClick={goToLogin}>Have an account? Log in</button>
-      </div>
-    );
-  }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+  };
 
   return (
     <Router>
@@ -46,18 +52,28 @@ function App() {
         <header className="App-header">
           <h1>Welcome to Pragati</h1>
           <h2>The Fitness App of the Future</h2>
-
+          {isAuthenticated ? (
+            <nav>
+              <Link to="/">Home</Link> |
+              <Link to="/workout">Workout Now</Link> |
+              <Link to="/past-workouts">View Past Workouts</Link> |
+              <button onClick={handleLogout}>Logout</button>
+            </nav>
+          ) : (
+            <nav>
+              <Link to="/login">Login</Link> |
+              <Link to="/signup">Sign Up</Link>
+            </nav>
+          )}
           <Routes>
-            <Route path="/" element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />} />
+            <Route path="/" element={isAuthenticated ? <HomePage /> : <Navigate replace to="/login" />} />
             <Route path="/login" element={<LoginForm onAuthSuccess={handleAuthSuccess} />} />
             <Route path="/signup" element={<SignUpForm onAuthSuccess={handleAuthSuccess} />} />
-            <Route path="*" element={<Navigate to="/" />} />
-            <Route path="/past-workouts" element={<PastWorkouts />} /> {/* Make sure you have this route */}
-            <Route path="/workout" element={<WorkoutEntryForm />} />
+            <Route path="/workout" element={isAuthenticated ? <WorkoutEntryForm /> : <Navigate replace to="/login" />} />
+            <Route path="/past-workouts" element={isAuthenticated ? <PastWorkouts /> : <Navigate replace to="/login" />} />
+            <Route path="*" element={<Navigate replace to={isAuthenticated ? "/" : "/login"} />} />
           </Routes>
         </header>
-
-        {!isAuthenticated && <NavigationButtons />} {/* Use the new component */}
       </div>
     </Router>
   );

@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 //CORS install
 const cors = require('cors');
 app.use(cors());
@@ -39,15 +40,18 @@ const jwt = require('jsonwebtoken');
 // Middleware to parse JSON
 app.use(express.json());
 
+const authenticateToken = require('./authenticateToken');
 //Workout posting route
-app.post('/submit-workout', async (req, res) => {
+app.post('/submit-workout', authenticateToken,async (req, res) => {
   console.log('Received workout data:', req.body.workout);
   try {
     // Assuming req.body.workout is the array of exercises with their sets
     const workoutData = req.body.workout;
 
     // Save workout data to MongoDB
-    const workout = new Workout({ exercises: workoutData });
+    const workout = new Workout({ 
+      exercises: workoutData,
+      userId: req.user.id  });
     await workout.save();
 
     // Send a success response
@@ -83,7 +87,7 @@ app.post('/signup', async (req, res) => {
     const user = new User(req.body);
     await user.save();
     const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '2 days' });
-    res.status(201).send({ user, token });
+    res.status(201).send({ user: user, token: token }); // This sends the user info and token back to the client
   } catch (error) {
     console.error('Signup error:', error);
     res.status(400).send({ message: error.message }); // Send back a more detailed error message
@@ -98,22 +102,25 @@ app.post('/login', async (req, res) => {
       return res.status(401).send({ error: 'Login failed!' });
     }
     const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '2 days' });
-    res.send({ user, token });
+    res.send({ user: user, token: token }); // Make sure to include the token here
   } catch (error) {
-    res.status(400).send(error);
+    console.error('Login error:', error);
+    res.status(400).send({ message: 'Login error' });
   }
 });
 
-// GET route to retrieve past workouts
-app.get('/api/workouts', async (req, res) => {
+
+app.get('/api/workouts', authenticateToken, async (req, res) => {
   try {
-    const workouts = await Workout.find(); // This will retrieve all workouts
+    const userId = req.user.id; // Assumed to be set by the authenticateToken middleware
+    const workouts = await Workout.find({ userId }); // Filter workouts by user ID
     res.status(200).json(workouts);
   } catch (error) {
     console.error('Error fetching workouts:', error);
     res.status(500).send({ error: 'Failed to fetch workouts' });
   }
 });
+
 
 
 

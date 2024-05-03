@@ -13,6 +13,7 @@ function LoginForm({ onAuthSuccess }) {
     setError('');
     try {
       const response = await axios.post('http://localhost:3000/login', { email, password });
+      localStorage.setItem('token', response.data.token); // Store the token in local storage
       console.log('Login successful', response.data);
       onAuthSuccess(response.data.token);
       navigate('/'); // Navigate to the homepage after successful login
@@ -21,6 +22,7 @@ function LoginForm({ onAuthSuccess }) {
       console.error('Login failed', error?.response?.data);
     }
   };
+  
 
   const navigateToSignUp = () => {
     navigate('/signup'); // Navigate to the signup page

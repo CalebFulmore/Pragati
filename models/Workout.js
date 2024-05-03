@@ -13,6 +13,7 @@ const exerciseSchema = new mongoose.Schema({
 const workoutSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   exercises: [exerciseSchema],
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 const Workout = mongoose.model('Workout', workoutSchema);
