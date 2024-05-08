@@ -7,6 +7,8 @@ import HomePage from './components/HomePage';
 import WorkoutEntryForm from './components/WorkoutEntryForm';
 import PastWorkouts from './components/PastWorkouts';
 import axios from 'axios';
+import logo from './logo.svg'; 
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -50,6 +52,7 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
+        <img src={logo} alt="Pragati Logo" className="App-logo"/> 
           <h1>Welcome to Pragati</h1>
           <h2>The Fitness App of the Future</h2>
           {isAuthenticated ? (
@@ -61,8 +64,7 @@ function App() {
             </nav>
           ) : (
             <nav>
-              <Link to="/login">Login</Link> |
-              <Link to="/signup">Sign Up</Link>
+             
             </nav>
           )}
           <Routes>

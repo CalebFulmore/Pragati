@@ -9,6 +9,10 @@ function SignUpForm({ onAuthSuccess }) {
   const [error, setError] = useState('');
   const navigate = useNavigate(); // Add this line to get the navigate function
 
+  const navigateToLogin = () => {
+    navigate('/login'); // Navigate to the login page
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
@@ -54,6 +58,7 @@ function SignUpForm({ onAuthSuccess }) {
         />
       </div>
       <button type="submit">Sign Up</button>
+      <button type="button" onClick={navigateToLogin}>Login</button> 
     </form>
   );
 }

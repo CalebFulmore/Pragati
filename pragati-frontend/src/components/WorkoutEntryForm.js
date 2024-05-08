@@ -7,6 +7,7 @@ function WorkoutEntryForm() {
   const [reps, setReps] = useState('');
   const [weight, setWeight] = useState('');
   const [workout, setWorkout] = useState([]);
+  
 
   const handleAddSet = () => {
     const newSet = { reps: Number(reps), weight: Number(weight) };
