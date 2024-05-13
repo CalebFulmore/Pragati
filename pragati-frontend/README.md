@@ -1,3 +1,85 @@
+# Pragati Fitness App
+
+## Introduction
+Pragati is a cutting-edge fitness application designed to help users manage and track their workout routines effectively. It embraces the principle of progressive overload, motivating users to gradually increase the intensity of their workouts, akin to the story of the boy who grows stronger by carrying a heavier pig each day.
+
+## Features
+- **Workout Entry:** Log daily workouts with details such as exercise type, sets, reps, and weights.
+- **Past Workouts:** Access and review historical workout data to track progress over time.
+- **User Profile Management:** Securely update and manage personal account settings.
+
+## System Requirements
+- Compatible with personal computers.
+- Requires an internet connection for initial setup and data synchronization.
+
+## Getting Started
+
+### Installation
+1. **Download the Pragati app**
+   - Clone the repository to your local machine.
+2. **Install Backend Dependencies**
+   - Open a terminal window, navigate to the Pragati folder, and run:
+     ```
+     npm install express mongoose bcryptjs jsonwebtoken dotenv cors
+     ```
+3. **Install Frontend Dependencies**
+   - Open another terminal window, navigate to the Pragati-frontend folder, and run:
+     ```
+     npm install react-router-dom axios
+     ```
+4. **Start the Application**
+   - In the backend terminal, run:
+     ```
+     node server.js
+     ```
+   - In the frontend terminal, run:
+     ```
+     npm start
+     ```
+   - When prompted, type `Y` to allow the app to open in your browser.
+
+### Creating an Account
+- Navigate to the "Create Account" section on the homepage.
+- Enter required details (username, DOB, email, and password).
+- Submit the form to create your account and be redirected to the homepage.
+
+### Logging In
+- Open the app and select "Login".
+- Enter your email and password.
+- Click "Login" to access the homepage.
+
+## User Interface Overview
+- **Main Screen Layout:** Divided into Home, Workout Now, and Past Workouts.
+- **Navigation Bar:** Easily navigate between different sections.
+
+## Using the App
+### Recording a Workout
+- Go to "Workout Now".
+- Enter details of your workout (type of exercises, sets, reps, and weight).
+- Submit to record your workout.
+
+### Viewing Past Workouts
+- Navigate to "Past Workouts".
+- Browse and delete old workouts as needed.
+
+## Troubleshooting
+### Common Issues and Solutions
+- **Login Issues:** Check email and password accuracy.
+- **App Crashes:** Ensure stable internet connection, check for updates, or reinstall the app.
+
+## Customer Support
+- **Email:** fulmorec1332@student.faytechcc.edu
+- **Phone:** 1-910-922-5753
+
+## FAQ
+- **Benefits of Pragati?** Helps progressively overload your workouts.
+- **Offline Access?** Viewing plans offline is possible if pre-loaded.
+- **Privacy?** Uses bcrypt and JSON Web Tokens for robust security.
+
+## Legal and Privacy Information
+- By using this app, you agree to comply with all applicable laws and our privacy policy.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

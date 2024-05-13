@@ -7,6 +7,7 @@ function SignUpForm({ onAuthSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [dob, setDob] = useState('');
   const navigate = useNavigate(); // Add this line to get the navigate function
 
   const navigateToLogin = () => {
@@ -17,7 +18,7 @@ function SignUpForm({ onAuthSuccess }) {
     event.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:3000/signup', { username, email, password });
+      const response = await axios.post('http://localhost:3000/signup', { username, dob, email, password });
       console.log('Account created successfully', response.data);
       localStorage.setItem('token', response.data.token); // Store the token in local storage
       onAuthSuccess(response.data.token); // Update authentication state to true
@@ -45,6 +46,13 @@ function SignUpForm({ onAuthSuccess }) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <label>Date of Birth:</label>
+        <input
+          type="date"
+          value={dob}
+          onChange={(e) => setDob(e.target.value)}
           required
         />
       </div>

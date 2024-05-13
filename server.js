@@ -84,15 +84,35 @@ app.delete('/api/workouts/:id', async (req, res) => {
 // Signup route
 app.post('/signup', async (req, res) => {
   try {
-    const user = new User(req.body);
+    const { username, email, password, dob } = req.body; // Destructure the new field from the request body
+
+    // Optional: Validate the dob here if needed, e.g., check format or logical errors
+
+    // Create a new user instance with destructured data
+    const user = new User({
+      username,
+      email,
+      password,
+      dob // Include the DOB in the user creation
+    });
+
+    // Hash the password before saving (assuming your User model doesn't automatically handle it)
+    user.password = await bcrypt.hash(user.password, 8);
+
+    // Save the user to the database
     await user.save();
+
+    // Sign a new token with the user's id
     const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '2 days' });
-    res.status(201).send({ user: user, token: token }); // This sends the user info and token back to the client
+
+    // Send the new user data and token back to the client
+    res.status(201).send({ user, token });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(400).send({ message: error.message }); // Send back a more detailed error message
+    res.status(400).send({ message: error.message });
   }
 });
+
 
 // Login route
 app.post('/login', async (req, res) => {
