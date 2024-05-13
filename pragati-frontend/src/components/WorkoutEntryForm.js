@@ -25,22 +25,22 @@ function WorkoutEntryForm() {
   };
 
   const handleSubmitWorkout = async () => {
-    console.log('Submitting workout:', workout); 
-    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+    const workoutPayload = { workout };
+    const token = localStorage.getItem('token');
     try {
-      await axios.post('http://localhost:3000/submit-workout', { workout }, {
-        headers: {
-          Authorization: `Bearer ${token}` // Include the token in the Authorization header
-        }
-      });
-      alert('Workout submitted successfully');
-      // Reset the workout
-      setWorkout([]);
+        const response = await axios.post('http://localhost:3000/submit-workout', workoutPayload, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        console.log('Workout submitted successfully', response.data);
+        alert('Workout submitted successfully');
+        setWorkout([]);
     } catch (error) {
-      console.error('Error submitting workout', error);
-      alert('Error submitting workout');
+        console.error('Error submitting workout:', error);
+        alert('Error submitting workout: ' + (error.response?.data.error || 'An unknown error occurred'));
     }
-  };
+};
+
+  
   
 
   const setOrdinal = (n) => {

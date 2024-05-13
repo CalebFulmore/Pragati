@@ -10,18 +10,23 @@ function LoginForm({ onAuthSuccess }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log('Sending email:', email);  // Confirm email format
+    console.log('Sending password:', password);  // Log the password being sent
     setError('');
+
     try {
       const response = await axios.post('http://localhost:3000/login', { email, password });
-      localStorage.setItem('token', response.data.token); // Store the token in local storage
-      console.log('Login successful', response.data);
+      console.log('Login response:', response.data);  // Log response data
+      localStorage.setItem('token', response.data.token);
       onAuthSuccess(response.data.token);
-      navigate('/'); // Navigate to the homepage after successful login
+      navigate('/');
     } catch (error) {
+      console.error('Login failed:', error.response?.data);  // Detailed error from server
       setError('Login failed. Please check your credentials.');
-      console.error('Login failed', error?.response?.data);
     }
-  };
+};
+
+  
   
 
   const navigateToSignUp = () => {
